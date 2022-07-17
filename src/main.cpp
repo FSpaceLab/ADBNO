@@ -39,12 +39,11 @@ uint8_t shoulder_system = 0,
         shoulder_accel = 0, 
         shoulder_mag = 0;
 
-// JSON OBJECT FOR TRANSFERING DATA
-StaticJsonDocument<256> json_obj;
-char json_arr[256];
 
 // OBJECTS FOR PROCESSING ANGLES
 imu::Quaternion root_q, shoulder_q, finaly_q;
+
+void printQ(imu::Quaternion &q, imu::Quaternion &q2);
 
 void setup(void)
 {
@@ -78,7 +77,10 @@ void setup(void)
     MQTT_USER,
     MQTT_PASSWORD,
     MQTT_CLIENT_ID);
-    
+  
+  // JSON OBJECT FOR TRANSFERING DATA
+  StaticJsonDocument<256> json_obj;
+  char json_arr[256];
 
   if (is_root_sensor_available) {
     root_imu.getSystemStatus(&root_system_status, &root_self_test_results, &root_system_error);
@@ -101,12 +103,17 @@ void setup(void)
     json_obj["ist2"] = "-1";
     json_obj["ise2"] = "-1";
   }
-
+  serializeJson(json_obj, json_arr);
+  
+  mqtt.send(MQTT_ARMS_TOPIC, json_arr);
   delay(1000);
 }
 
 void loop(void)
 { 
+  // JSON OBJECT FOR TRANSFERING DATA
+  StaticJsonDocument<256> json_obj;
+  char json_arr[256];
   root_q = root_imu.getQuat();
   shoulder_q = shoulder_imu.getQuat();
   // printQ(root_q, shoulder_q);
@@ -162,4 +169,57 @@ void loop(void)
   LOG(json_arr);
 
   delay(DELAY_MS);
+}
+
+void printQ(imu::Quaternion &q, imu::Quaternion &q2) {
+  imu::Quaternion q3;
+
+  q3 = q * q2.conjugate();
+
+  uint8_t system, gyro, accel, mag;
+  system = gyro = accel = mag = 0;
+  root_imu.getCalibration(&system, &gyro, &accel, &mag);
+
+  /* The data should be ignored until the system calibration is > 0 */
+  if (!system)
+  {
+      Serial.print("! ");
+  }
+
+  /* Display the individual values */
+  Serial.print("Sys:");
+  Serial.print(system, DEC);
+  Serial.print(" G:");
+  Serial.print(gyro, DEC);
+  Serial.print(" A:");
+  Serial.print(accel, DEC);
+  Serial.print(" M:");
+  Serial.print(mag, DEC);
+
+  Serial.print("\tQ: ");
+  Serial.print(q.x());
+  Serial.print("  ");
+  Serial.print(q.y());
+  Serial.print("  ");
+  Serial.print(q.z());
+  Serial.print("  ");
+  Serial.print(q.w());
+
+  Serial.print("\tQ2: ");
+  Serial.print(q2.x());
+  Serial.print("  ");
+  Serial.print(q2.y());
+  Serial.print("  ");
+  Serial.print(q2.z());
+  Serial.print("  ");
+  Serial.print(q2.w());
+
+  Serial.print("\tQ3: ");
+  Serial.print(q3.x());
+  Serial.print("  ");
+  Serial.print(q3.y());
+  Serial.print("  ");
+  Serial.print(q3.z());
+  Serial.print("  ");
+  Serial.println(q3.w());
 }
