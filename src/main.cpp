@@ -80,6 +80,28 @@ void setup(void)
     MQTT_CLIENT_ID);
     
 
+  if (is_root_sensor_available) {
+    root_imu.getSystemStatus(&root_system_status, &root_self_test_results, &root_system_error);
+    json_obj["iss1"] = String(root_system_status);
+    json_obj["ist1"] = String(root_self_test_results);
+    json_obj["ise1"] = String(root_system_error);
+  } else {
+    json_obj["iss1"] = "-1";
+    json_obj["ist1"] = "-1";
+    json_obj["ise1"] = "-1";
+  }
+
+  if (is_shoulder_sensor_available) {
+    shoulder_imu.getSystemStatus(&shoulder_system_status, &shoulder_self_test_results, &shoulder_system_error);
+    json_obj["iss2"] = String(shoulder_system_status);
+    json_obj["ist2"] = String(shoulder_self_test_results);
+    json_obj["ise2"] = String(shoulder_system_error);
+  } else {
+    json_obj["iss2"] = "-1";
+    json_obj["ist2"] = "-1";
+    json_obj["ise2"] = "-1";
+  }
+
   delay(1000);
 }
 
@@ -98,19 +120,12 @@ void loop(void)
   // ics - IMU CALIBRATING SYSTEM; icg - IMU CALIBRATING GYRO
   // ica - IMU CALIBRATING ACCELEROMETER; icm - IMU CALIBRATING MAGNETOMETER
   if (is_root_sensor_available) {
-    root_imu.getSystemStatus(&root_system_status, &root_self_test_results, &root_system_error);
     root_imu.getCalibration(&root_system, &root_gyro, &root_accel, &root_mag);
-    json_obj["iss1"] = String(root_system_status);
-    json_obj["ist1"] = String(root_self_test_results);
-    json_obj["ise1"] = String(root_system_error);
     json_obj["ics1"] = String(root_system);
     json_obj["icg1"] = String(root_gyro);
     json_obj["ica1"] = String(root_accel);
     json_obj["icm1"] = String(root_mag);
   } else {
-    json_obj["iss1"] = "-1";
-    json_obj["ist1"] = "-1";
-    json_obj["ise1"] = "-1";
     json_obj["ics1"] = "-1";
     json_obj["icg1"] = "-1";
     json_obj["ica1"] = "-1";
@@ -118,19 +133,12 @@ void loop(void)
   }
   
   if (is_shoulder_sensor_available) {
-    shoulder_imu.getSystemStatus(&shoulder_system_status, &shoulder_self_test_results, &shoulder_system_error);
     shoulder_imu.getCalibration(&shoulder_system, &shoulder_gyro, &shoulder_accel, &shoulder_mag);
-    json_obj["iss2"] = String(shoulder_system_status);
-    json_obj["ist2"] = String(shoulder_self_test_results);
-    json_obj["ise2"] = String(shoulder_system_error);
     json_obj["ics2"] = String(shoulder_system);
     json_obj["icg2"] = String(shoulder_gyro);
     json_obj["ica2"] = String(shoulder_accel);
     json_obj["icm2"] = String(shoulder_mag);
   } else {
-    json_obj["iss2"] = "-1";
-    json_obj["ist2"] = "-1";
-    json_obj["ise2"] = "-1";
     json_obj["ics2"] = "-1";
     json_obj["icg2"] = "-1";
     json_obj["ica2"] = "-1";
