@@ -21,20 +21,34 @@ bool is_root_sensor_available = false;
 bool is_shoulder_sensor_available = false;
 
 // IMU SENSORS STATUS, ERRORS and CALIBRATING DATA
-uint8_t root_system_status, root_self_test_results, root_system_error;
-root_system_status = root_self_test_results = root_system_error = 0;
-uint8_t root_system, root_gyro, root_accel, root_mag;
-root_system = root_gyro = root_accel = root_mag = 0;
+uint8_t root_system_status = 0, 
+        root_self_test_results = 0, 
+        root_system_error = 0;
 
-uint8_t system_system_status, system_self_test_results, system_system_error;
-system_system_status = system_self_test_results = system_system_error = 0;
-uint8_t system_system, system_gyro, system_accel, system_mag;
-system_system = system_gyro = system_accel = system_mag = 0;
+uint8_t root_system = 0, 
+        root_gyro = 0, 
+        root_accel = 0, 
+        root_mag = 0;
 
-uint8_t root_system, root_gyro, root_accel, root_mag;
-root_system = root_gyro = root_accel = root_mag = 0; 
-uint8_t shoulder_system, shoulder_gyro, shoulder_accel, shoulder_mag;
-shoulder_system = shoulder_gyro = shoulder_accel = shoulder_mag = 0;
+uint8_t shoulder_system_status = 0,
+        shoulder_self_test_results = 0,
+        shoulder_system_error = 0;
+       
+uint8_t shoulder_system = 0, 
+        shoulder_gyro = 0, 
+        shoulder_accel = 0, 
+        shoulder_mag = 0;
+
+uint8_t root_system = 0, 
+        root_gyro = 0, 
+        root_accel = 0, 
+        root_mag = 0;
+
+uint8_t shoulder_system = 0, 
+        shoulder_gyro = 0, 
+        shoulder_accel = 0, 
+        shoulder_mag = 0;
+
 
 // JSON OBJECT FOR TRANSFERING DATA
 StaticJsonDocument<256> json_obj;
@@ -98,7 +112,7 @@ void loop(void)
     root_imu.getSystemStatus(&root_system_status, &root_self_test_results, &root_system_error);
     root_imu.getCalibration(&root_system, &root_gyro, &root_accel, &root_mag);
     json_obj["iss1"] = String(root_system_status);
-    json_obj["ist1"] = String(root_self_test_result);
+    json_obj["ist1"] = String(root_self_test_results);
     json_obj["ise1"] = String(root_system_error);
     json_obj["ics1"] = String(root_system);
     json_obj["icg1"] = String(root_gyro);
@@ -118,7 +132,7 @@ void loop(void)
     shoulder_imu.getSystemStatus(&shoulder_system_status, &shoulder_self_test_results, &shoulder_system_error);
     shoulder_imu.getCalibration(&shoulder_system, &shoulder_gyro, &shoulder_accel, &shoulder_mag);
     json_obj["iss2"] = String(shoulder_system_status);
-    json_obj["ist2"] = String(shoulder_self_test_result);
+    json_obj["ist2"] = String(shoulder_self_test_results);
     json_obj["ise2"] = String(shoulder_system_error);
     json_obj["ics2"] = String(shoulder_system);
     json_obj["icg2"] = String(shoulder_gyro);
