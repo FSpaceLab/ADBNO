@@ -39,17 +39,6 @@ uint8_t shoulder_system = 0,
         shoulder_accel = 0, 
         shoulder_mag = 0;
 
-uint8_t root_system = 0, 
-        root_gyro = 0, 
-        root_accel = 0, 
-        root_mag = 0;
-
-uint8_t shoulder_system = 0, 
-        shoulder_gyro = 0, 
-        shoulder_accel = 0, 
-        shoulder_mag = 0;
-
-
 // JSON OBJECT FOR TRANSFERING DATA
 StaticJsonDocument<256> json_obj;
 char json_arr[256];
