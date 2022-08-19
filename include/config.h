@@ -12,16 +12,16 @@
 // #define SIDE "LEFT"
 #define SIDE "RIGHT"
 
-// #define MQTT_WIFI_SSID "FSpace"
-#define MQTT_WIFI_SSID "HomeWiFi"
-// #define MQTT_WIFI_PASSWORD "freakspace#main"
-#define MQTT_WIFI_PASSWORD "57907433"
+#define MQTT_WIFI_SSID "FSpace"
+// #define MQTT_WIFI_SSID "HomeWiFi"
+#define MQTT_WIFI_PASSWORD "freakspace#main"
+// #define MQTT_WIFI_PASSWORD "57907433"
 // #define MQTT_SERVER "teleoperate.annaone.com"
 // #define MQTT_PORT 1883
 // #define MQTT_USER "magic"
 // #define MQTT_PASSWORD "zEbl042_Chug"
 
-#define MQTT_SERVER "192.168.0.107"
+#define MQTT_SERVER "192.168.1.66"
 #define MQTT_PORT 1883
 #define MQTT_USER "anna_1"
 #define MQTT_PASSWORD "anna_1"
